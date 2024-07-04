@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=sc, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <button class="geo-btn">location</button>
+  <div id="showDetails">Loc details:</div>
+  <div id="map">
+  </div>
+  <script>
+    document.querySelector(".geo-btn").addEventListener("click", () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(
+          successCallback,
+          errorCallback,
+          options
+        );
+      }
+    });
+    
+    const successCallback = (position) => {
+      
+
+      console.log(`lat:${position.coords.latitude.toFixed(10)}`);
+      console.log(`long:${position.coords.longitude.toFixed(10)}`);
+      console.log(`accuracy:${position.coords.accuracy} meters`)
+      console.log(`altitude:${position.coords.altitude} meters`)
+
+      // const { lat, long , accuracy, altitude } = position.coords;
+      
+      showDetails.innerHTML = "accuracy : " +position.coords.accuracy+"<br>"
+      showDetails.innerHTML += "Latitude : " +position.coords.latitude+"<br>"
+      showDetails.innerHTML += "Longitude : " +position.coords.longitude+"<br>"
+      showDetails.innerHTML += "altitude : " +position.coords.altitude+"<br>"
+      // showDetails.innerHTML += "heading : " +heading+"<br>"
+      // showDetails.innerHTML += "speed : " +speed+"<br>"
+
+        map.innerHTML = '<iframe src="https://maps.google.com//maps?q='+position.coords.latitude+','+position.coords.longitude+'&amp;z=15&amp;output =embed" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
+
+          
+
+    };
+    const errorCallback = (error) => {
+      console.log(error.message);
+    };
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 500,
+      maximumAge:1000
+    };
+    
+  </script>
+</body>
+
+</html>

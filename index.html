@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -57,4 +57,230 @@
   </script>
 </body>
 
+</html> -->
+
+
+<!-- code starts here
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=sc, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <button class="geo-btn">location</button>
+    <div id="showDetails">Loc details:</div>
+
+    <table class="table mt-5 mx-auto" id="coordtable">
+      <thead>
+        <tr>
+          <th scope="col">Sl no.</th>
+          <th scope="col">Latitude</th>
+          <th scope="col">Longitude</th>
+        </tr>
+      </thead>
+      <!-- <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td id="lat1"></td>
+          <td id="long1"></td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td id="lat2"></td>
+          <td id="long2"></td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td id="lat3"></td>
+          <td id="long3"></td>
+        </tr>
+        <tr>
+          <th scope="row">4</th>
+          <td id="lat4"></td>
+          <td id="long4"></td>
+        </tr>
+        <tr>
+          <th scope="row">5</th>
+          <td id="lat5"></td>
+          <td id="long5"></td>
+        </tr>
+        <tr>
+          <th scope="row">6</th>
+          <td id="lat6"></td>
+          <td id="long6"></td>
+        </tr>
+        <tr>
+          <th scope="row">7</th>
+          <td id="lat7"></td>
+          <td id="long7"></td>
+        </tr>
+
+        <tr>
+          <th scope="row">8</th>
+          <td id="lat8"></td>
+          <td id="long8"></td>
+        </tr>
+        <tr>
+          <th scope="row">9</th>
+          <td id="lat9"></td>
+          <td id="long9"></td>
+        </tr>
+        <tr>
+          <th scope="row">10</th>
+          <td id="lat10"></td>
+          <td id="long10"></td>
+        </tr> -->
+        <tr> 
+          <th scope="row">Mean</th>
+          <td id="latmean">Latitude:</td>
+          <td id="longmean">Longitude:</td>
+        </tr>
+      </tbody>
+    </table>
+    <div id="map"></div>
+    <script>
+      document.querySelector(".geo-btn").addEventListener("click", () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.watchPosition(
+            successCallback,
+            errorCallback,
+            options
+          );
+        }
+      });
+      const latitudes = [];
+      const longitudes = [];
+      var n = 0 
+      const successCallback = (position) => {
+        n++
+        console.log(`lat:${position.coords.latitude}`);
+        console.log(`long:${position.coords.longitude}`);
+        console.log(`accuracy:${position.coords.accuracy} meters`);
+        console.log(`altitude:${position.coords.altitude} meters`);
+
+        // const { lat, long , accuracy, altitude } = position.coords;
+
+        showDetails.innerHTML =
+          "accuracy : " + position.coords.accuracy + "<br>";
+        showDetails.innerHTML +=
+          "Latitude : " + position.coords.latitude + "<br>";
+        showDetails.innerHTML +=
+          "Longitude : " + position.coords.longitude + "<br>";
+        showDetails.innerHTML +=
+          "altitude : " + position.coords.altitude + "<br>";
+
+        latitudes.push(position.coords.latitude);
+        longitudes.push(position.coords.longitude);
+
+        // var acc = position.coords.accuracy
+        // var lat1 = 51.477928
+        // var lon1 = -0.001545
+        // var lat2 = position.coords.latitude
+        // var lon2= position.coords.longitude
+        // var R = 6378.137;
+        // var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+        // var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+        // var a = Math.sin(dLat/2) * Math.sin(dLat/2) +Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2)
+        // var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        // var d = R * c;
+        // var D = d * 1000;
+        // console.log(D)
+        // // map.innerHTML = '<iframe src="https://maps.google.com//maps?q='+position.coords.latitude+','+position.coords.longitude+'&amp;z=15&amp;output =embed" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
+
+        // var realDist = D - acc
+        // console.log(realDist)
+
+        // var d1=realDist/1000
+        // var c1 =d1/R
+
+        // var c1= 2 * Math.atan2(Math.sqrt(a1), Math.sqrt(1-a1));
+        // var R1=d1/c1
+
+        // var lat2 = (dLat1 + lat1 * Math.PI / 180)*(180/Math.PI)
+        // var long2 = (dLon1 + lat1 * Math.PI / 180)*(180/Math.PI)
+
+        for (let i = 0; i < 20; i++) {
+          console.log(latitudes[i], longitudes[i]);
+        }
+        console.log(latitudes, longitudes);
+
+       
+        // lat1.innerHTML = latitudes[]
+
+        const latSum = latitudes.reduce((partialSum, a) => partialSum + a, 0);
+        const longSum = longitudes.reduce((partialSum, a) => partialSum + a, 0);
+
+        const latMean = latSum/n
+        const longMean = longSum/n
+
+        // latitudes.forEach(function(data){
+        //   var row = coordtable.insertRow()
+        //   var cell = row.insertCell(0)
+        //   cell.textContent = data 
+        // })
+        // longitudes.forEach(function(data){
+        //   var row = coordtable.insertRow()
+        //   var cell = row.insertCell(0)
+        //   cell.textContent = data 
+        // })
+
+        for (var i = 0; i < n; i++) {
+                var row = coordtable.insertRow(); // Create a new row
+
+                var selCell = row.insertCell(0)
+                selCell.textContent = n
+
+                var latCell = row.insertCell(1); 
+                latCell.textContent = latitudes[i]; // Set the text content of the cell
+
+                var longCell = row.insertCell(2); // Create a new cell for longitude
+                longCell.textContent = longitudes[i]; // Set the text content of the cell
+            }
+
+        latmean.innerHTML = "lat:" +latMean
+        longmean.innerHTML = "long:" +longMean
+
+
+        console.log(n)
+        console.log(`Sum of lats: ${latSum}`)
+      };
+
+      
+      // console.log(latSum,longSum)
+      // console.log(latitudes,longitudes)
+
+      const errorCallback = (error) => {
+        console.log(error.message);
+      };
+      const options = {
+        enableHighAccuracy: true,
+        timeout: 1000, //1 second
+        maximumAge: 100,
+        
+      };
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
+
+

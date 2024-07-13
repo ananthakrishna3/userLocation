@@ -13,11 +13,12 @@
   </head>
 
   <body>
+    <a href="./getLocation.html">getCurrentPosition</a> <br>
+    <a href="./index.html">go back</a><br><br>
     <button class="geo-btn">location</button>
     <div id="showDetails">Loc details:</div>
-
-   
-    <!-- <input type="file" id="file" ng-model="csvFile" onchange="angular.element(this).scope().ExcelExport(event)"/> -->
+    
+    
     
     <script>
       document.querySelector(".geo-btn").addEventListener("click", () => {
@@ -29,8 +30,11 @@
           );
         }
       });
- 
+      const latitudes = [];
+      const longitudes = [];
+      var n = 0 
       const successCallback = (position) => {
+        n++
         console.log(`lat:${position.coords.latitude}`);
         console.log(`long:${position.coords.longitude}`);
         console.log(`accuracy:${position.coords.accuracy} meters`);
@@ -47,7 +51,141 @@
         showDetails.innerHTML +=
           "altitude : " + position.coords.altitude + "<br>";
 
-      }
+        latitudes.push(position.coords.latitude);
+        longitudes.push(position.coords.longitude);
+
+
+      // reading excel sheets
+
+      
+
+      $scope.ExcelExport= function (event) {
+
+
+    var input = event.target;
+    var reader = new FileReader();
+    reader.onload = function(){
+        var fileData = reader.result;
+        var wb = XLSX.read(fileData, {type : 'binary'});
+
+        wb.SheetNames.forEach(function(sheetName){
+        var rowObj =XLSX.utils.sheet_to_row_object_array(wb.Sheets[sheetName]);
+        var jsonObj = JSON.stringify(rowObj);
+        console.log(jsonObj)
+        })
+    };
+    reader.readAsBinaryString(input.files[0]);
+    };
+
+
+        // implementing trialteration
+        function toRadians(degrees) {
+          return degrees * (Math.PI / 180);
+        }
+
+        function toDegrees(radians) {
+        return radians * (180 / Math.PI);
+        }
+
+
+        function haversine(lat1, lon1, lat2, lon2) {
+          const R = 6371e3; // Earth radius in meters
+          const phi1 = toRadians(lat1);
+          const phi2 = toRadians(lat2);
+          const deltaPhi = toRadians(lat2 - lat1);
+          const deltaLambda = toRadians(lon2 - lon1);
+
+          const a = Math.sin(deltaPhi / 2) ** 2 +
+            Math.cos(phi1) * Math.cos(phi2) *
+            Math.sin(deltaLambda / 2) ** 2;
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+          return R * c;
+}
+
+        function circleIntersection(lat1, lon1, r1, lat2, lon2, r2) {
+          const d = haversine(lat1, lon1, lat2, lon2);
+
+        if (d > r1 + r2 || d < Math.abs(r1 - r2)) {
+          return null; // No intersection or one circle is inside the other
+       }
+
+  const a = (r1**2 - r2**2 + d**2) / (2 * d);
+  const h = Math.sqrt(r1**2 - a**2);
+
+  // Midpoint between circle centers
+  const lat0 = lat1 + a * (lat2 - lat1) / d;
+  const lon0 = lon1 + a * (lon2 - lon1) / d;
+
+  // Calculate intersection points
+  const latInt1 = toDegrees(toRadians(lat0) + h * (toRadians(lon2) - toRadians(lon1)) / d);
+  const lonInt1 = toDegrees(toRadians(lon0) - h * (toRadians(lat2) - toRadians(lat1)) / d);
+
+  const latInt2 = toDegrees(toRadians(lat0) - h * (toRadians(lon2) - toRadians(lon1)) / d);
+  const lonInt2 = toDegrees(toRadians(lon0) + h * (toRadians(lat2) - toRadians(lat1)) / d);
+
+  return [[latInt1, lonInt1], [latInt2, lonInt2]];
+}
+
+
+const lat1 = 13.178794103703705	, lon1 = 74.9357167; // Example coordinates
+const lat2 = 13.178784288461546	, lon2 = 74.93571412948 ; // Example coordinates
+const radius = 3.5; // 4 meters
+
+
+const intersections = circleIntersection(lat1, lon1, radius, lat2, lon2, radius);
+
+if (intersections) {
+  const [[latInt1, lonInt1], [latInt2, lonInt2]] = intersections;
+  console.log(`Intersection Point 1: (${latInt1}, ${lonInt1})`);
+  console.log(`Intersection Point 2: (${latInt2}, ${lonInt2})`);
+} else {
+  console.log("No intersection points found.");
+}
+
+
+
+
+
+        for (let i = 0; i < 20; i++) {
+          console.log(latitudes[i], longitudes[i]);
+        }
+        console.log(latitudes, longitudes);
+
+       
+        // lat1.innerHTML = latitudes[]
+
+        const latSum = latitudes.reduce((partialSum, a) => partialSum + a, 0);
+        const longSum = longitudes.reduce((partialSum, a) => partialSum + a, 0);
+
+        const latMean = latSum/n
+        const longMean = longSum/n
+
+
+  
+        //adding to table
+
+        for (var i = 0; i < n; i++) {
+                var row = coordtable.insertRow(); // Create a new row
+
+                var selCell = row.insertCell(0)
+                selCell.textContent = n
+
+                var latCell = row.insertCell(1); 
+                latCell.textContent = latitudes[i]; // Set the text content of the cell
+
+                var longCell = row.insertCell(2); // Create a new cell for longitude
+                longCell.textContent = longitudes[i]; // Set the text content of the cell
+            }
+
+        latmean.innerHTML = "lat:" +latMean
+        longmean.innerHTML = "long:" +longMean
+
+
+        console.log(n)
+        console.log(`Sum of lats: ${latSum}`)
+      };
+
+      
       // console.log(latSum,longSum)
       // console.log(latitudes,longitudes)
 

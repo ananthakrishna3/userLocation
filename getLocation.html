@@ -14,12 +14,78 @@
 
   <body>
     <a href="./getLocation.html">getCurrentPosition</a> <br>
-    <a href="./index.html">go back</a><br>
     <button class="geo-btn">location</button>
     <div id="showDetails">Loc details:</div>
     
-    
-    
+    <table class="table mt-5 mx-auto" id="coordtable">
+      <thead>
+        <tr>
+          <th scope="col">Array itr.</th>
+          <th scope="col">Latitude</th>
+          <th scope="col">Longitude</th>
+        </tr>
+      </thead>
+      <!-- <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td id="lat1"></td>
+          <td id="long1"></td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td id="lat2"></td>
+          <td id="long2"></td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td id="lat3"></td>
+          <td id="long3"></td>
+        </tr>
+        <tr>
+          <th scope="row">4</th>
+          <td id="lat4"></td>
+          <td id="long4"></td>
+        </tr>
+        <tr>
+          <th scope="row">5</th>
+          <td id="lat5"></td>
+          <td id="long5"></td>
+        </tr>
+        <tr>
+          <th scope="row">6</th>
+          <td id="lat6"></td>
+          <td id="long6"></td>
+        </tr>
+        <tr>
+          <th scope="row">7</th>
+          <td id="lat7"></td>
+          <td id="long7"></td>
+        </tr>
+
+        <tr>
+          <th scope="row">8</th>
+          <td id="lat8"></td>
+          <td id="long8"></td>
+        </tr>
+        <tr>
+          <th scope="row">9</th>
+          <td id="lat9"></td>
+          <td id="long9"></td>
+        </tr>
+        <tr>
+          <th scope="row">10</th>
+          <td id="lat10"></td>
+          <td id="long10"></td>
+        </tr> -->
+        <tr> 
+          <th scope="row">Mean</th>
+          <td id="latmean">Latitude:</td>
+          <td id="longmean">Longitude:</td>
+        </tr>
+      </tbody>
+    </table>
+    <input type="file" id="file" ng-model="csvFile" onchange="angular.element(this).scope().ExcelExport(event)"/>
+    <div id="map"></div>
     <script>
       document.querySelector(".geo-btn").addEventListener("click", () => {
         if (navigator.geolocation) {

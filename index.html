@@ -1,67 +1,4 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=sc, initial-scale=1.0" />
-  <title>Document</title>
-</head>
-
-<body>
-  <button class="geo-btn">location</button>
-  <div id="showDetails">Loc details:</div>
-  <div id="map">
-  </div>
-  <script>
-    document.querySelector(".geo-btn").addEventListener("click", () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(
-          successCallback,
-          errorCallback,
-          options
-        );
-      }
-    });
-    
-    const successCallback = (position) => {
-      
-
-      console.log(`lat:${position.coords.latitude.toFixed(10)}`);
-      console.log(`long:${position.coords.longitude.toFixed(10)}`);
-      console.log(`accuracy:${position.coords.accuracy} meters`)
-      console.log(`altitude:${position.coords.altitude} meters`)
-
-      // const { lat, long , accuracy, altitude } = position.coords;
-      
-      showDetails.innerHTML = "accuracy : " +position.coords.accuracy+"<br>"
-      showDetails.innerHTML += "Latitude : " +position.coords.latitude+"<br>"
-      showDetails.innerHTML += "Longitude : " +position.coords.longitude+"<br>"
-      showDetails.innerHTML += "altitude : " +position.coords.altitude+"<br>"
-      // showDetails.innerHTML += "heading : " +heading+"<br>"
-      // showDetails.innerHTML += "speed : " +speed+"<br>"
-
-        map.innerHTML = '<iframe src="https://maps.google.com//maps?q='+position.coords.latitude+','+position.coords.longitude+'&amp;z=15&amp;output =embed" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
-
-          
-
-    };
-    const errorCallback = (error) => {
-      console.log(error.message);
-    };
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 500,
-      maximumAge:1000
-    };
-    
-  </script>
-</body>
-
-</html> -->
-
-
-<!-- code starts here
- -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -76,7 +13,7 @@
       crossorigin="anonymous"
     />
   </head>
-
+<!--Using geoLocationApi -->
   <body>
     <a href="./getLocation.html">getCurrentPosition</a> <br>
     <button class="geo-btn">location</button>
@@ -184,32 +121,33 @@
         latitudes.push(position.coords.latitude);
         longitudes.push(position.coords.longitude);
 
-        // var acc = position.coords.accuracy
-        // var lat1 = 51.477928
-        // var lon1 = -0.001545
-        // var lat2 = position.coords.latitude
-        // var lon2= position.coords.longitude
-        // var R = 6378.137;
-        // var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
-        // var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
-        // var a = Math.sin(dLat/2) * Math.sin(dLat/2) +Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2)
-        // var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        // var d = R * c;
-        // var D = d * 1000;
-        // console.log(D)
-        // // map.innerHTML = '<iframe src="https://maps.google.com//maps?q='+position.coords.latitude+','+position.coords.longitude+'&amp;z=15&amp;output =embed" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
+        //Trilateration_method
+        var acc = position.coords.accuracy
+        var lat1 = 51.477928
+        var lon1 = -0.001545
+        var lat2 = position.coords.latitude
+        var lon2= position.coords.longitude
+        var R = 6378.137;
+        var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+        var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2)
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var d = R * c;
+        var D = d * 1000;
+        console.log(D)
+        // map.innerHTML = '<iframe src="https://maps.google.com//maps?q='+position.coords.latitude+','+position.coords.longitude+'&amp;z=15&amp;output =embed" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
 
-        // var realDist = D - acc
-        // console.log(realDist)
+        var realDist = D - acc
+        console.log(realDist)
 
-        // var d1=realDist/1000
-        // var c1 =d1/R
+        var d1=realDist/1000
+        var c1 =d1/R
 
-        // var c1= 2 * Math.atan2(Math.sqrt(a1), Math.sqrt(1-a1));
-        // var R1=d1/c1
+        var c1= 2 * Math.atan2(Math.sqrt(a1), Math.sqrt(1-a1));
+        var R1=d1/c1
 
-        // var lat2 = (dLat1 + lat1 * Math.PI / 180)*(180/Math.PI)
-        // var long2 = (dLon1 + lat1 * Math.PI / 180)*(180/Math.PI)
+        var lat2 = (dLat1 + lat1 * Math.PI / 180)*(180/Math.PI)
+        var long2 = (dLon1 + lat1 * Math.PI / 180)*(180/Math.PI)
 
         for (let i = 0; i < 20; i++) {
           console.log(latitudes[i], longitudes[i]);
@@ -236,6 +174,7 @@
         //   cell.textContent = data 
         // })
 
+        //finding mean of all the iterations 
         for (var i = 0; i < n; i++) {
                 var row = coordtable.insertRow(); // Create a new row
 
